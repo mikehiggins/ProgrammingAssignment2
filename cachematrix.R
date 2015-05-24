@@ -14,20 +14,27 @@
 ## This simply returns a list of four functions for use with the matrix
 makeCacheMatrix <- function(x = matrix()) {
 
-       	inv <- NULL								# sets the cache inverse to null
-        set <- function(y) {					# creates "set" function which takes an argument "y"
-                x <<- y							# Assign new matrix to x
-                inv <<- NULL					# If a new matrix is set, then set the inverse to null
+		# Set the cache inverse to null
+       	inv <- NULL
+
+		# Creates "set" function which takes an argument "y"
+        set <- function(y) {
+                x <<- y			# Assign new matrix to x
+                inv <<- NULL	# If a new matrix is set, then set the inverse to null
         }
-        get <- function() {						# just return the current matrix
+		# Just return the current matrix
+        get <- function() {
         		x
         }
-        setInv <- function(source) {			# set the matrix inverse using the source() function call
+		# Set the matrix inverse using the source() function call
+        setInv <- function(source) {
         		inv <<- source
         }
-        getInv <- function() {					# Get the matrix inverse
+        # Get the matrix inverse
+        getInv <- function() {
         		inv
         }
+        # Return the list of the four functions
         list(set = set, get = get,
              setInv = setInv,
              getInv = getInv)
@@ -37,13 +44,15 @@ makeCacheMatrix <- function(x = matrix()) {
 ## and return the cached version if available
 cacheSolve <- function(x, ...) {
 
-        inv <- x$getInv()		# assign the function getInverse to the value of "inv"
+		# Assign the function getInverse to the value of "inv"
+        inv <- x$getInv()
         # Check if the inverse has already been computed, if so, return the cached value and a message
         if(!is.null(inv)) {
                 message("getting cached inverse")
                 return(inv)
         }
         data <- x$get()
+        # Find the inverse of the matrix and assign to inv
         inv <- solve(data, ...)
         x$setInv(inv)
         return(inv)
