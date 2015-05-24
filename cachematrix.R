@@ -12,28 +12,39 @@
 ## the cached result should be returned instead
 
 ## Write a short comment describing this function
-
- makeVector <- function(x = numeric()) {
-        m <- NULL								# creates variable m, with null value
-        set <- function(y) {					# creates a variable called set with function
-                x <<- y
-                m <<- NULL
-        }
-        get <- function() x
-        setmean <- function(mean) m <<- mean
-        getmean <- function() m
-        list(set = set, get = get,
-             setmean = setmean,
-             getmean = getmean)
-}
-
 makeCacheMatrix <- function(x = matrix()) {
 
+       m <- NULL								# creates variable m, with null value
+        set <- function(y) {					# creates "set" function which takes an argument "y"
+                x <<- y							# Assigned value of "y" argument to "x" using <<- operator
+                m <<- NULL						# Assigns value of "NULL" to "m" using <<- operator
+        }
+        get <- function() {
+        		x
+        }						# 
+        setInv <- function(source) {
+        		m <<- source
+        }
+        getInv <- function() {
+        		m
+        }
+        list(set = set, get = get,
+             setInv = setInv,
+             getInv = getInv)
 }
 
-
-## Write a short comment describing this function
-
+## Compute the inverse of a matrix. Check if cached copy available before computing each time
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+        inv <- x$getInv()		# assign the function getInverse to the value of "inv"
+        # Check if the inverse has already been computed, if so, return the cached value
+        if(!is.null(inv)) {
+                message("getting cached inverse")
+                return(inv)
+        }
+        data <- x$get()
+        inv <- solve(data, ...)
+        x$setInv(inv)
+
+        return(inv)
 }
